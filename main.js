@@ -17,7 +17,7 @@ program // ora stabiliamo i comandi
     .command("scan") // come chiamare il comando per l'utente
     .description("esegue uno scan sulla stampante e restituisce un file in output") // descrizione del comando
     .option("-o, --output <fileName>", "sceglie la destinazione del file output, default = 'scansione.exemple' ", "scansione") // una flag del comando,poi ne puoi mettere di piu
-    .option("-p, --png", "il file esce in formato pdf")
+    .option("-p, --png", "il file esce in formato png")
     .option("-j, --jpg", "il file esce in formato jpg")
     .option("-f, --pdf", "il file esce in formato pdf")
     .action((options) => {
