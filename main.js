@@ -75,7 +75,7 @@ program
                 console.log("Eseguzione del comando in corso...");
 
             } else if (options.string) {
-                command_to_exe = "printf " + "\"" + options.string + "\"" + "| lp -d stampante-bw -n " + numero_di_copie;
+                command_to_exe = "printf " + "\"" + options.string + "\"" + "| lp -d stampante-bw ";
 
                 console.log("comando eseguito:\n" + command_to_exe);
                 console.log("Eseguzione del comando in corso...");
@@ -114,12 +114,12 @@ program
 
             if (options.numberCopy) {
                 number_of_copy = options.numberCopy;
-                command_to_exe_2 = "startez print -f " + filePath + " -n " + number_of_copy;
+                command_to_exe_2 = "printez print -f " + filePath + " -n " + number_of_copy;
             } else {
-                command_to_exe_2 = "startez print -f " + filePath
+                command_to_exe_2 = "printez print -f " + filePath
             }
 
-            command_to_exe_1 = "startez scan -o " + fileName + " -p";
+            command_to_exe_1 = "printez scan -o " + fileName + " -p";
 
             let command_to_exe = command_to_exe_1 + " && " + command_to_exe_2 + " && rm " + filePath;
 
