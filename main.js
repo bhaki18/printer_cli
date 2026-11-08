@@ -2,6 +2,7 @@
 import { execSync } from 'child_process';
 import { program } from "commander";
 import ora from 'ora';
+import { red, green, cyan, yellow } from 'colorette';
 
 
 
@@ -34,13 +35,14 @@ program // ora stabiliamo i comandi
 
         let command_to_exe = "newgrp lp && scanimage -L && scanimage --source FlatBed --resolution 300 --format=" + format + " -o " + dest;
 
-        console.log("formato messo:" + format);
-        console.log("dest messa:" + dest);
-        console.log("comando eseguito:\n" + command_to_exe);
+        console.log(cyan("formato messo: " + format));
+        console.log(cyan("dest messa: " + dest));
+        console.log(yellow("comando eseguito:\n" + command_to_exe));
 
-        console.log("Eseguzione del comando in corso...");
+        const spinner = ora("Esecuzione del comando in corso...").start();
 
         const output = execSync(command_to_exe);
+        spinner.succeed(green("Scan completato con successo!"));
     })
 
 program
@@ -71,26 +73,25 @@ program
             } else if (options.file) {
                 command_to_exe = "lp " + options.file;
 
-                console.log("comando eseguito:\n" + command_to_exe);
-                console.log("Eseguzione del comando in corso...");
+                console.log(yellow("comando eseguito:\n" + command_to_exe));
+                console.log(cyan("Esecuzione del comando in corso..."));
 
             } else if (options.string) {
                 command_to_exe = "printf " + "\"" + options.string + "\"" + "| lp -d stampante-bw ";
 
-                console.log("comando eseguito:\n" + command_to_exe);
-                console.log("Eseguzione del comando in corso...");
+                console.log(yellow("comando eseguito:\n" + command_to_exe));
+                console.log(cyan("Esecuzione del comando in corso..."));
 
             }
 
-
-
+            const spinner = ora("Stampa in corso...").start();
             for (let i = 0; i < numero_di_copie; i++) {
                 execSync(command_to_exe);
             }
-
+            spinner.succeed(green("Stampa avviata con successo!"));
 
         } catch (error) {
-            console.log("FATAL ERROR:" + error);
+            console.log(red("FATAL ERROR:" + error));
         }
 
     })
@@ -125,13 +126,13 @@ program
 
             spinner.text = "scan in corso..."
             execSync(command_to_exe);
-            spinner.succeed("Stampa avviata con successo!")
+            spinner.succeed(green("Stampa avviata con successo!"))
 
 
 
 
         } catch (err) {
-            console.log("FATAL ERROR: " + err);
+            console.log(red("FATAL ERROR: " + err));
         }
     })
 
