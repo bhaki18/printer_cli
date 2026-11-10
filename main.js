@@ -7,7 +7,7 @@ import { red, green, cyan, yellow } from 'colorette';
 
 
 
-const version = "1.4.1";
+const version = "1.5.1";
 
 program
     .name("printez") //  nome del programma 
@@ -175,6 +175,28 @@ program
         
 
         
+    })
+
+program
+    .command("remove")
+    .description("cancella uno o più job in coda")
+    .option("-j,--job <id>","cancella un job specifico")
+    .option("-a,--all","cancella tutti i job in coda")
+    .action((options)=>{
+        if(options.job){
+            options.job = parseInt(options.job);
+            if(!options.job){
+                console.log("specifica un id valido per il job");
+            }else{
+                console.log("job eliminato dalla coda id: " + options.job);
+                execSync("lprm " + options.job);
+            }
+        }
+
+        if(options.all){
+            console.log("cancellata l'intera coda dei job!");
+            execSync("lprm -");
+        }
     })
 
 program.parse();
