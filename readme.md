@@ -22,6 +22,15 @@ printez print -s "Testo da stampare"
 
 # Esegue una fotocopia diretta dallo scanner
 printez copy -n 1
+
+# Mostra le informazioni sui job (-q in coda, -c completati, -n non completati)
+printez show -q
+printez show -c
+printez show -n
+
+# Cancella uno specifico job o l'intera coda
+printez remove -j <id>
+printez remove -a
 ```
 
 ## Come disinstallarla

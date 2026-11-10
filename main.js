@@ -7,7 +7,7 @@ import { red, green, cyan, yellow } from 'colorette';
 
 
 
-const version = "1.5.1";
+const version = "1.5.2";
 
 program
     .name("printez") //  nome del programma 
@@ -140,62 +140,64 @@ program
 program
     .command("show")
     .description("mostra le informazioni sulle attività della stampante")
-    .option("-q,--queque","mostra la coda dei job della stampante")
-    .option("-c,--completed","mostra i job completati della stampante")
-    .option("-n,--noncompleted","mostra i job non completati della stampante")
-    .action((options)=>{
-          
-            let empty = true;
-            let output;
-            if(options.queque){
-                output = execSync("lpstat -u").toString();
-                empty = false;
-                console.log("processi in coda:");
-                console.log(output);
-            }
+    .option("-q,--queque", "mostra la coda dei job della stampante")
+    .option("-c,--completed", "mostra i job completati della stampante")
+    .option("-n,--noncompleted", "mostra i job non completati della stampante")
+    .action((options) => {
 
-            if(options.completed){
-                output = execSync("lpstat -W completed").toString();
-                empty = false;
-                console.log("processi completati:");
-                console.log(output);
-            }
+        let empty = true;
+        let output;
+        if (options.queque) {
+            output = execSync("lpstat -u").toString();
+            empty = false;
+            console.log(cyan("processi in coda:"));
+            console.log(output);
+        }
 
-            if(options.noncompleted){
-                output = execSync("lpstat -W not-completed").toString();
-                empty = false;
-                console.log("processi non completati:")
-                console.log(output);
-            }
+        if (options.completed) {
+            output = execSync("lpstat -W completed").toString();
+            empty = false;
+            console.log(green("processi completati:"));
+            console.log(output);
+        }
 
-            if(empty){
-                console.warn("bro non hai inserito nessuna flag,cosa vorresti vedere di preciso?");
-                
-            }
-        
+        if (options.noncompleted) {
+            output = execSync("lpstat -W not-completed").toString();
+            empty = false;
+            console.log(yellow("processi non completati:"))
+            console.log(output);
+        }
 
-        
+        if (empty) {
+            console.warn(red("bro non hai inserito nessuna flag,cosa vorresti vedere di preciso?"));
+
+        }
+
+
+
     })
 
 program
     .command("remove")
     .description("cancella uno o più job in coda")
-    .option("-j,--job <id>","cancella un job specifico")
-    .option("-a,--all","cancella tutti i job in coda")
-    .action((options)=>{
-        if(options.job){
+    .option("-j,--job <id>", "cancella un job specifico")
+    .option("-a,--all", "cancella tutti i job in coda")
+    .action((options) => {
+        if (options.job) {
             options.job = parseInt(options.job);
-            if(!options.job){
-                console.log("specifica un id valido per il job");
-            }else{
-                console.log("job eliminato dalla coda id: " + options.job);
+            if (!options.job) {
+                console.log(red("specifica un id valido per il job"));
+            } else {
+                const spinner = ora("Eliminazione job in corso...").start();
                 execSync("lprm " + options.job);
+                spinner.succeed(green("job eliminato dalla coda id: " + options.job));
             }
         }
 
-        if(options.all){
-            console.log("cancellata l'intera coda dei job!");
+        if (options.all) {
+            const spinner = ora("Cancellazione coda in corso...").start();
             execSync("lprm -");
+            spinner.succeed(green("cancellata l'intera coda dei job!"));
         }
     })
 
